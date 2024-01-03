@@ -14,10 +14,19 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       
-      - name: Run a one-line script
-        run: echo Hello, world!
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.8'  
 
-      - name: Run a multi-line script
+      - name: Install dependencies
         run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+          python -m pip install --upgrade pip
+          pip install datamesh
+
+      - name: Run Data Contract Validation
+        run: data-contract-validation examples/all/full-example
+
+      - name: Check for Validation Success
+        run: echo "Validation successful!"
+
