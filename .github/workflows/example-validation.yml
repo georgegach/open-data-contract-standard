@@ -17,16 +17,24 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.8'  
+          python-version: '3.8' 
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install datamesh
 
-      - name: Run Data Contract Validation
-        run: data-contract-validation examples/all/full-example.yaml
+      - name: Run Data Contract Validation on all examples
+        run: |
+          set -o pipefail
+          for file in examples/all/*.yaml; do
+            echo "Validating $file..."
+            if ! data-contract-validation "$file"; then
+              echo "Validation failed for $file"
+              exit 1
+            fi
+          done
+          echo "All files validated successfully."
 
-      - name: Check for Validation Success
-        run: echo "Validation successful!"
-
+      - name: Validation Success
+        run: echo "All validations passed successfully!"
