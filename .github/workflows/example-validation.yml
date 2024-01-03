@@ -25,7 +25,7 @@ jobs:
           pip install datamesh
 
       - name: Run Data Contract Validation
-        run: data-contract-validation examples/all/full-example
+        run: data-contract-validation examples/all/full-example.yaml
 
       - name: Check for Validation Success
         run: echo "Validation successful!"
