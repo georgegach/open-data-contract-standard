@@ -27,14 +27,21 @@ jobs:
       - name: Run Data Contract Validation on all examples
         run: |
           set -o pipefail
+          failed_files=""
           for file in examples/all/*.yaml; do
             echo "Validating $file..."
             if ! data-contract-validation "$file"; then
               echo "Validation failed for $file"
-              exit 1
+              failed_files="$failed_files $file"
             fi
           done
-          echo "All files validated successfully."
+
+          if [ -n "$failed_files" ]; then
+            echo "Validation failed for the following files:$failed_files"
+            exit 1
+          else
+            echo "All files validated successfully."
+          fi
 
       - name: Validation Success
         run: echo "All validations passed successfully!"
